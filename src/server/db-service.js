@@ -1,5 +1,4 @@
 const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
 
 const url = 'mongodb://localhost:27017';
 const dbName = 'riddleApp';
@@ -30,6 +29,7 @@ async function getDocumentOfCollection({collectionName, query={}}) {
   return docs;
 }
 
+
 async function getAllDocumentOfCollection({collectionName}) {
   return await getDocumentOfCollection({collectionName});
 }
@@ -38,23 +38,22 @@ async function getDocumentOfCollectionByQuery({collectionName, query}) {
   return await getDocumentOfCollection({collectionName, query});
 }
 
-// MongoClient.connect(url, {useUnifiedTopology: true}, function(err, client) {
-//     assert.strictEqual(null, err);
-//     console.log('connected successfully to mongo server');
+async function createDocumentofCollection({collectionName, data}) {
+  const mongoClient = await MongoClient.connect(url, { useUnifiedTopology: true });
+  console.log('connected successfully to mongo server from createDocumentOfCollection');
 
-//     const db = client.db(dbName);
+  const db = mongoClient.db(dbName);
+  const collection = db.collection(collectionName);
+  console.log('data is: ', data)
+  const document = await collection.insertOne(data);
+  mongoClient.close();
 
-//     findDocuments(db, function() {
-//       client.close();
-//     })
-
-//     // client.close();
-// });
-
-
+  return document;
+}
 
 
 module.exports = {
   getAllDocumentOfCollection,
   getDocumentOfCollectionByQuery,
+  createDocumentofCollection
 }
