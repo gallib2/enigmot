@@ -5,7 +5,7 @@ const httpStatus = require('../httpStatuses');
 const userService = require('./userService');
 const {registerScheme, loginScheme} = require('../validation/auth');
 const {validate} = require('../validation/joi');
-const {logIn, logout} = require('../auth');
+const {logIn, logout, isLoggedIn} = require('../auth');
 const {guest, auth} = require('../middleware/auth');
 
 router.post('/signup', guest, async function(req, res){
@@ -32,6 +32,24 @@ router.post('/signup', guest, async function(req, res){
         res.sendStatus(httpStatus.badRequest);
     }
 });
+
+router.get('/login/auth', (req, res) => {
+    try {
+
+        if(isLoggedIn(req)) {
+            return res.status(httpStatus.ok).json({auth:true});
+        }
+
+        res.sendStatus(httpStatus.ok).json({auth: false});
+
+    } catch (err) {
+        console.log('err from /login/auth ', err);
+        if(err.status && err.message) {
+            return err.status(err.status).json({message: err.message});
+        }
+        return res.sendStatus(httpStatus.badRequest)
+    }
+})
 
 router.post('/login', guest, async function(req, res){
     const {email, password} = req.body;

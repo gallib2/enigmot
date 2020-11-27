@@ -1,0 +1,15 @@
+.auth-container {
+    padding: 20px;
+    margin: 20px;
+
+    .auth-form {
+        display: flex;
+        flex-direction: column;
+        width: 250px;
+        margin: 0 auto;
+
+        .auth-text-field {
+            margin-top: 20px;
+        }
+    }
+}

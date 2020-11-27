@@ -1,11 +1,11 @@
 const { isLoggedIn } = require('../auth');
-const {BadRequest} = require('../errors/errors');
+const {BadRequest, Unauthorized} = require('../errors/errors');
 
 
 function guest(req, res, next) {
     console.log('from guest... req: ', req.session)
     if (isLoggedIn(req)) {
-        return next(new Error('You already logged in'))
+        return next(new BadRequest('You already logged in'))
     }
 
     next();
@@ -14,7 +14,7 @@ function guest(req, res, next) {
 function auth(req, res, next) {
     console.log('from auth... req: ', req.session)
     if (!isLoggedIn(req)) {
-        return next(new BadRequest('You must be logged in'))
+        return next(new Unauthorized('You must be logged in'))
     }
 
     next();

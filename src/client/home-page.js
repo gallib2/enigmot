@@ -1,5 +1,8 @@
 import React from 'react';
-
+import { useHistory } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import { logout } from './authentication/authenticationApi';
+import auth from './authentication/auth';
 
 // TODO :
 // - get all riddles
@@ -7,10 +10,19 @@ import React from 'react';
 // - a click on a riddle will enter the canvas (pass the riddle question to the canvas)
 
 const HomePage = (props) => {
-    
+    const history = useHistory();
+
+    const handleLogout = async (e) => {
+        await logout();
+        auth.signout();
+        history.push('/login');
+    }
 
     return (
-        <div> hellooo 12 </div>
+        <div>
+            <div>hello to home page</div>
+            <Button onClick={handleLogout}>Logout</Button>
+        </div>
     );
 }
 

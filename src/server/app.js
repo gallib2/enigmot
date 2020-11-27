@@ -32,10 +32,10 @@ console.log('session from app.js: ', session);
 const port = process.env.PORT || 4000;
 
 
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+// const corsOptions = {
+//   origin: 'http://localhost:3000',
+//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// }
 
 // app.use(cors());
 app.use(express.json()); // for parsing application/json
@@ -57,6 +57,7 @@ app.get('/', function (req, res) {
   res.send('Hello World')
 })
 
+
 app.use('/paint', paint);
 app.use('/user', userRouter);
 
@@ -66,8 +67,13 @@ app.use('/user', userRouter);
 // })
 
 app.use(function (err, req, res, next) {
-  console.error('err: ', err.stack)
-  res.status(500).send('Something broke!')
+  console.error('err: ', err.stack);
+
+  if(err.message) {
+    return res.status(err.status).json({message: err.message});
+  }
+
+  return res.status(500).send('Something broke!')
 })
 
 app.listen(port, () => {
