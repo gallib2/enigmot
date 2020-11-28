@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const paint = require('./paint');
 const userRouter = require('./user/userRouter');
+const riddleRoute = require('./riddles/riddleRoute');
 const Redis = require('ioredis');
 const connectRedis = require('connect-redis')
 const session = require('express-session');
@@ -60,6 +61,7 @@ app.get('/', function (req, res) {
 
 app.use('/paint', paint);
 app.use('/user', userRouter);
+app.use('/riddles', riddleRoute);
 
 // app.use(function (req, res, next) {
 //   console.log('from middlewhere')

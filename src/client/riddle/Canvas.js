@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ReactSketchCanvas } from "react-sketch-canvas";
-import './Canvas.scss';
-// import sass from 'node-sass'; // or require('node-sass');
+import _ from 'lodash';
+import {savePaint} from './riddle.api'; 
 
-// var result = sass.renderSync({file: "style.scss"});
-// import { v4 } from 'uuid';
+import './Canvas.scss';
+
+
+// TODO - on destroy -> save the paint? or ask if to save or warn about it...
 
 const styles = {
     border: "0.0625rem solid #9c9c9c",
@@ -14,11 +16,18 @@ const styles = {
     overflow: "hidden"
 };
 
-const Canvas = () => {
+const Canvas = (props) => {
     const [color, setColor] = useState('black');
     const [strokeWidth, setStrokeWidth] = useState(4);
 
     const canvasEl = useRef(null);
+
+    useEffect(() => {
+        const isHavePaint = !_.isEmpty(props.riddle.paint);
+        if(isHavePaint) {
+            loadPath(props.riddle.paint);
+        }
+    }, [])
 
     const handleClickPen = () => {
         setColor('black');
@@ -40,19 +49,18 @@ const Canvas = () => {
               });
     }
 
-    const handleSave = () => {
-        canvasEl.current.exportPaths()
-            .then(data => {
-                console.log(data); // TODO - save to mongo
-            })
-            .catch(e => {
-                console.log(e);
-            });
-        
+    const handleSave = async () => {
+        try {
+            const paint = await canvasEl.current.exportPaths();
+            await savePaint({paint, riddleId: props.riddle._id});
+        } catch (err) {
+            // TODO ...
+            console.log('error to save paint... ', err);
+        }
     }
 
-    const loadPath = () => {
-        // canvasEl.current.loadPaths(pathsTemp);
+    const loadPath = (paint) => {
+        canvasEl.current.loadPaths(paint);
     }
 
     return (

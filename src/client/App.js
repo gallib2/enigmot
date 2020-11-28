@@ -11,15 +11,17 @@ import './App.css';
 // import Riddle from './riddle';
 import Signup from './signup/signup';
 import Login from './login/login';
-import HomePage from './home-page';
+import Riddle from './riddle/riddle';
+import HomePage from './homePage/home-page';
 import ProtectedRoute from './protectedRoute';
 
 
 function App() {
   return (
     <Switch>
-        <ProtectedRoute exact path='/' component={HomePage} />
+        <ProtectedRoute exact path='/riddle' component={Riddle} />
         <Route exact path='/login' component={Login} />
+        <ProtectedRoute exact path='/' component={HomePage} />
         <Route path='*' component={() => '404 Not Found'} />
     </Switch>
   );

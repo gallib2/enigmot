@@ -37,15 +37,15 @@ router.get('/login/auth', (req, res) => {
     try {
 
         if(isLoggedIn(req)) {
-            return res.status(httpStatus.ok).json({auth:true});
+            return res.status(httpStatus.ok).json({'auth':true});
         }
 
-        res.sendStatus(httpStatus.ok).json({auth: false});
+        res.status(httpStatus.ok).json({'auth': false});
 
     } catch (err) {
         console.log('err from /login/auth ', err);
         if(err.status && err.message) {
-            return err.status(err.status).json({message: err.message});
+            return res.status(err.status).json({message: err.message});
         }
         return res.sendStatus(httpStatus.badRequest)
     }
@@ -58,14 +58,11 @@ router.post('/login', guest, async function(req, res){
         await validate(loginScheme, {email, password});
         const user = await userService.getUser(email, password);
 
-        console.log('password: ', password);
-        console.log('user[0].password ', user[0].password);
-
-        if(_.isEmpty(user) || !(await userService.getMatchesPassword(password, user[0].password))) {
+        if(_.isEmpty(user) || !(await userService.getMatchesPassword(password, user.password))) {
             req.sendStatus(httpStatus.unauthorized);
         }
 
-        logIn(req, user[0]._id);
+        logIn(req, user._id);
 
         res.status(httpStatus.ok).json({});
     } catch(err) {
