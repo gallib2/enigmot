@@ -32,25 +32,25 @@ function mergeUserRiddlesWithGeneral({userRiddles, riddles}) {
     
     if(_.isEmpty(riddles)) return [];
 
-    console.log('-------------------------- in the merge ---------------')
+    // console.log('-------------------------- in the merge ---------------')
     const riddlesClient = [];
 
     for(const riddle of riddles) {
-        console.log('riddle: ', riddle);
-        console.log('userRiddles: ', userRiddles);
+        // console.log('riddle: ', riddle);
+        // console.log('userRiddles: ', userRiddles);
         const userRiddle = userRiddles.find(item => item.riddleId === riddle._id.toString()) || {};
-        console.log('userRiddle: ', userRiddle)
+        // console.log('userRiddle: ', userRiddle)
         const res = Object.assign({}, riddleClientObject, riddle, userRiddle);
 
         riddlesClient.push(res);
         
-        console.log('res ', res);
+        // console.log('res ', res);
         
     }
     
-    console.log('riddlesClient: ', riddlesClient);
+    // console.log('riddlesClient: ', riddlesClient);
 
-    console.log('-------------------------- end the merge ---------------')
+    // console.log('-------------------------- end the merge ---------------')
 
     return riddlesClient;
     

@@ -37,7 +37,9 @@ router.post('/save', auth, async function(req, res, next) {
 
     try {
 
-        await userService.savePaint({userId, paint, riddleId});
+        const isSaved = await userService.savePaint({userId, paint, riddleId});
+        console.log('---------- is saved? ', isSaved);
+        // TODO - handle if not saved
 
         res.sendStatus(httpStatus.ok);
     } catch (err) {

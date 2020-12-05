@@ -6,6 +6,7 @@ import { Redirect, useLocation } from 'react-router-dom';
 
 const Login = () => {
     const [redirectTorefferer, setRedirectToRefferer] = useState(false);
+    const [redirectToSignUp, setRedirectToSignup] = useState(false);
     const {state} = useLocation();
 
     useEffect(() => {
@@ -14,12 +15,6 @@ const Login = () => {
         async function isAlreadLoggedIn() {
             const toRedirectToRefferer = await isLoggedin();
             setRedirectToRefferer(toRedirectToRefferer);
-            // let toRedirectToRefferer = false;
-            // if(auth.isAuthenticated || await isLoggedin()) {
-            //     toRedirectToRefferer = true;
-            //     auth.authenticte();
-            // }
-            // setRedirectToRefferer(toRedirectToRefferer)
         }
 
         isAlreadLoggedIn();
@@ -37,6 +32,11 @@ const Login = () => {
         }
     }
 
+    if(redirectToSignUp) {
+        return <Redirect to={'/signup'}/>
+    }
+
+
     if(redirectTorefferer) {
         return <Redirect to={state?.from || '/'}/>
     }
@@ -48,7 +48,11 @@ const Login = () => {
                 showUserName={false}
                 submitFunction={handleSubmit}
                 submitButtonText={'login'}
+                swipAuthFormFunc = {() => setRedirectToSignup(true)}
+                swipAuthFormText = {'new one? join here'}
             />
+
+            {/* <div onClick={() => setRedirectToSignup(true)}> new one? join here </div> */}
         </div>
     );
 }

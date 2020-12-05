@@ -21,6 +21,7 @@ function App() {
     <Switch>
         <ProtectedRoute exact path='/riddle' component={Riddle} />
         <Route exact path='/login' component={Login} />
+        <Route exact path='/signup' component={Signup} />
         <ProtectedRoute exact path='/' component={HomePage} />
         <Route path='*' component={() => '404 Not Found'} />
     </Switch>

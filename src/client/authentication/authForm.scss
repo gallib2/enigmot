@@ -1,6 +1,9 @@
 .auth-container {
     padding: 20px;
     margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .auth-form {
         display: flex;
@@ -10,6 +13,12 @@
 
         .auth-text-field {
             margin-top: 20px;
+            &.btn {
+                background-color: rgb(133, 221, 137);
+            }
+        }
+        .swip-auth-form {
+            text-align: center;
         }
     }
 }

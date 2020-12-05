@@ -52,60 +52,57 @@ async function createDocumentofCollection({ collectionName, data }) {
   return document;
 }
 
-async function updateDocumentofCollection({ collectionName, userId, paint, riddleId }) {
+async function updateUserPaint({ collectionName, userId, paint, riddleId }) {
   const mongoClient = await MongoClient.connect(url, { useUnifiedTopology: true });
   console.log('connected successfully to mongo server from updateDocumentofCollection');
 
   const db = mongoClient.db(dbName);
   const collection = db.collection(collectionName);
 
-  let query = { "_id": ObjectId(userId), riddles: { $elemMatch: { "riddleId": riddleId } } }
-  let update = { "$set": { "riddles.$.paint": paint } }
+  const date = (new Date()).toISOString();
 
-  let document = await collection.updateOne(query, update)
+  let query = { "_id": ObjectId(userId), riddles: { $elemMatch: { "riddleId": riddleId } } };
+  let update = { "$set": { "riddles.$.paint": paint, "riddles.$.last_modified": date } };
 
-  console.log('----------------- the dos is: ', document)
-  if (!document.modifiedCount) {
-    console.log('didnt updated...')
+  let document = await collection.updateOne(query, update);
+
+  let isUpdated = document.modifiedCount;
+  
+  if (!isUpdated) {
     query = { "_id": ObjectId(userId) }
-    update = { "$push": { "riddles": {riddleId, paint} } }
+    update = { "$push": { "riddles": {riddleId, paint, start_date: date, last_modified: date} } }
     document = await collection.updateOne(query, update);
 
-    if(!document.modifiedCount) {
-      console.log('-------- new doc: ', document);
-      console.log('------------- again... didnt updated.. ')
+    if(document.modifiedCount) {
+      isUpdated = true;
     }
+
   }
 
+  mongoClient.close();
+
+  return isUpdated;
+}
+
+async function updateDocumentofCollection({collectionName, query, update}) {
+  const mongoClient = await MongoClient.connect(url, { useUnifiedTopology: true });
+  console.log('connected successfully to mongo server from updateDocumentofCollection');
+
+  const db = mongoClient.db(dbName);
+  const collection = db.collection(collectionName);
+
+  const document = await collection.updateOne(query, update);
 
   mongoClient.close();
 
   return document;
 }
 
-// async function updateDocumentofCollection({collectionName, userId, paint, riddleId}) {
-//   const mongoClient = await MongoClient.connect(url, { useUnifiedTopology: true });
-//   console.log('connected successfully to mongo server from updateDocumentofCollection');
-
-//   const db = mongoClient.db(dbName);
-//   const collection = db.collection(collectionName);
-
-//   const document = await collection.updateOne(
-//     { "_id" : ObjectId(userId) }, 
-//     { $set: { "riddles.$[paint]" : paint} },
-//     {arrayFilters: [ { "riddleId": riddleId, "paint": {$exists: true} } ]},
-//     {upsert: true}
-//     );
-//   // const document = await collection.updateOne(query, {$set: dataToSet});
-//   mongoClient.close();
-
-//   return document;
-// }
-
 
 module.exports = {
   getAllDocumentOfCollection,
   getDocumentOfCollectionByQuery,
   createDocumentofCollection,
-  updateDocumentofCollection
+  updateDocumentofCollection,
+  updateUserPaint
 }

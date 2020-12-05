@@ -45,11 +45,11 @@ const RiddleItem = ({ riddle }) => {
     return (
         <div className='riddle-item-container' onClick={handleRiddleClick}>
             <div className='riddle-item-title'>{riddle.question.title}</div>
-            <div className='riddle-item-content'>{riddle.question.content}</div>
+            {/* <div className='riddle-item-content'>{riddle.question.content}</div>
             <div className='solved-container'>
                 <button className='riddle-item-btn' onClick={handleMarkAsSolved}>{solvedText}</button>
                 <span className={`riddle-item-solved ${solvedClassName}`}></span>
-            </div>
+            </div> */}
         </div>
     )
 }

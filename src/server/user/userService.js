@@ -26,27 +26,7 @@ async function _getUserFromDB(query) {
 async function getUserFromDB(email) {
     const query = { email: email };
     return await _getUserFromDB(query);
-
-    // try {
-    //     const user = await dbService.getDocumentOfCollectionByQuery({
-    //         collectionName: userCollection,
-    //         query: {user_name: userName}
-    //     });
-
-    //     return user;
-
-    // } catch (err) {
-    //     console.log('error in getUserFromDB: ', err);
-    //     throw err;
-    // }
 }
-
-
-// function _getHashedPassword(password) {
-//     const sha256 = crypto.createHash('sha256');
-//     const hash = sha256.update(password).digest('base64');
-//     return hash;
-// }
 
 async function _getHashedPassword(password) {
     const hashPassword = await hash(password, BCRYPT_WORK_FACTOR);
@@ -66,7 +46,8 @@ async function ceateUser(email, userName, password) {
         const user = {
             email: email,
             user_name: userName,
-            password: hashPassword
+            password: hashPassword,
+            created_date: (new Date()).toISOString()
         }
 
         return await dbService.createDocumentofCollection({ collectionName: userCollection, data: user })
@@ -98,45 +79,11 @@ async function getUserRiddles(userId) {
 
 
 async function savePaint({userId, paint, riddleId}) {
-    // // const query = {"_id" : ObjectId(userId), riddles: {riddleId: riddleId}};
-    // // const query = { "_id" : ObjectId(userId) }
-    // const query = {$or: [{ "_id" : ObjectId(userId), riddles: { $elemMatch: { "riddleId": riddleId } } },{ "_id" : ObjectId(userId) }]}
-    // // const query = { "_id" : ObjectId(userId), riddles: { $elemMatch: { "riddleId": riddleId } } }
-    // const dataToSet =  {$addToSet: { riddles: {paint, riddleId} } };
-    // // const dataToSet = {riddles: [{paint, riddleId}]};
 
+    const isSaved = await dbService.updateUserPaint({collectionName: userCollection, userId, paint, riddleId});
+    return isSaved;
 
-        //    const query = { "_id" : ObjectId(userId) };
-        //     const ts = { $set: { riddles.$[elem].paint" : paint} }
-        //     const fil = {
-        //         arrayFilters: [ { "elem.riddleId": riddleId  } ]
-        //     },
-        //   {upsert: true}
-
-    // const docs = await dbService.getDocumentOfCollectionByQuery({collectionName: userCollection,});
-    // console.log('--------- docs: ', docs);
-
-    const x = await dbService.updateDocumentofCollection({collectionName: userCollection, userId, paint, riddleId})
-
-    // console.log('------- x: ', x);
 }
-
-// this function saves new paint every time.
-// so we can add date and return the newer paint every time
-// async function savePaint({userId, paint, riddleId}) {
-//     // const query = {"_id" : ObjectId(userId), riddles: {riddleId: riddleId}};
-//     const query = { "_id" : ObjectId(userId) }
-//     // const query = { "_id" : ObjectId(userId), riddles: { $elemMatch: { "riddleId": riddleId } } }
-//     const dataToSet =  {$addToSet: { riddles: {paint, riddleId} } };
-//     // const dataToSet = {riddles: [{paint, riddleId}]};
-
-//     const docs = await dbService.getDocumentOfCollectionByQuery({collectionName: userCollection, query});
-//     console.log('--------- docs: ', docs);
-
-//     const x = await dbService.updateDocumentofCollection({collectionName: userCollection, query, dataToSet})
-
-//     // console.log('------- x: ', x);
-// }
 
 module.exports = {
     getUserFromDB,
