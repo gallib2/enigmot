@@ -27,8 +27,6 @@ router.post('/signup', guest, async function(req, res){
         res.status(httpStatus.ok).json({});
     } catch(err) {
         console.log('error in /signup: ', err);
-        console.log('error msg: ', err.message);
-        console.log('error status: ', err.status);
         res.sendStatus(httpStatus.badRequest);
     }
 });
@@ -84,50 +82,5 @@ router.post('/logout', auth, async function(req, res){
         res.sendStatus(httpStatus.badRequest);
     }
 });
-
-
-// router.post('/signup', async function(req, res){
-//     const username = req.body.username;
-//     const password = req.body.password;
-
-//     try {
-//         const user = await userService.getUserFromDB(username);
-//         const isUserExsists = !_.isEmpty(user);
-
-//         if(isUserExsists) {
-//            return res.status(httpStatus.ok).json({});
-//         }
-
-//         await userService.ceateUser(username, password);
-
-//         res.status(httpStatus.ok).json({});
-//     } catch(err) {
-//         console.log('error in /signup: ', err);
-//         res.sendStatus(httpStatus.badRequest);
-//     }
-// })
-
-// router.post('/login', async function(req, res){
-//     const {username, password} = req.body;
-
-//     try {
-        
-//         const user = await userService.getUser(username, password);
-
-//         if(_.isEmpty(user)) {
-//             req.sendStatus(httpStatus.unauthorized);
-//         }
-
-//         const authToken = userService.generateAuthToken();
-//         authTokens[authToken] = user;
-
-//         res.cookie('AuthToken', authToken);
-
-//         res.status(httpStatus.ok).json({});
-//     } catch(err) {
-//         console.log('error in /signup: ', err);
-//         res.sendStatus(httpStatus.badRequest);
-//     }
-// })
 
 module.exports = router;

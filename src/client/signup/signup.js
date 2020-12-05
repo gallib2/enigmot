@@ -40,6 +40,7 @@ const Signup = () => {
                 submitButtonText={'Submit'}
                 swipAuthFormFunc = {() => setRedirectToLogin(true)}
                 swipAuthFormText = {'already joined? login'}
+                toValidate = {true}
             />
 
             {/* <div onClick={() => setRedirectToLogin(true)}> already joined? login </div> */}

@@ -1,5 +1,6 @@
 const httpStatus = require("../httpStatuses");
 
+
 class BadRequest extends Error {
     constructor(message = 'Bad Request') {
         super(message);

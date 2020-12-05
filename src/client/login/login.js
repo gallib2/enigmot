@@ -50,6 +50,7 @@ const Login = () => {
                 submitButtonText={'login'}
                 swipAuthFormFunc = {() => setRedirectToSignup(true)}
                 swipAuthFormText = {'new one? join here'}
+                toValidate = {false}
             />
 
             {/* <div onClick={() => setRedirectToSignup(true)}> new one? join here </div> */}
