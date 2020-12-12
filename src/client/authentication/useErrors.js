@@ -64,7 +64,6 @@ const useErrors = () => {
         passwordIsError,
         usernameHelperText,
         usernameIsError,
-        // generalFieldsError
     }
 
     return {

@@ -20,9 +20,9 @@ export async function savePaint({paint, riddleId}) {
     }
 }
 
-export async function markSolveState({solveState}) {
+export async function markSolveState({riddleId, solveState}) {
     try {
-        const data = {solveState};
+        const data = {riddleId, solveState};
         const options = {
             method: 'POST',
             headers: { 'content-type': 'application/json' },

@@ -1,14 +1,25 @@
 .riddle-canvas-container {
     display: flex;
+    flex-direction: column;
+
+    .error-text {
+        margin-right: 5px;
+        margin-left: 5px;
+        color: #f44336;
+    }
 
     .btn-container {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         .btn-canvas {
-            width: 50px;
-            height: 50px;
+            width: 30px;
+            height: 30px;
     
             margin: 10px;
+
+            &.solved {
+                color: green;
+            }
         }
     }
 }

@@ -1,7 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import _ from 'lodash';
-import {savePaint} from './riddle.api'; 
+import config from '../config';
+
+import { savePaint, markSolveState } from './riddle.api';
+
+import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
+import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
+import Crop75OutlinedIcon from '@material-ui/icons/Crop75Outlined';
+import ClearOutlinedIcon from '@material-ui/icons/ClearOutlined';
+import UndoOutlinedIcon from '@material-ui/icons/UndoOutlined';
+import RedoOutlinedIcon from '@material-ui/icons/RedoOutlined';
+import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
+import OpenWithOutlinedIcon from '@material-ui/icons/OpenWithOutlined';
+import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
+
 
 import './Canvas.scss';
 
@@ -9,9 +22,9 @@ import './Canvas.scss';
 // TODO - on destroy -> save the paint? or ask if to save or warn about it...
 
 const styles = {
-    border: "0.0625rem solid #9c9c9c",
+    borderTop: "0.0625rem solid #9c9c9c",
     borderRadius: "0.25rem",
-    width: "75%",
+    width: "100%",
     height: "100vh",
     overflow: "hidden"
 };
@@ -19,15 +32,39 @@ const styles = {
 const Canvas = (props) => {
     const [color, setColor] = useState('black');
     const [strokeWidth, setStrokeWidth] = useState(4);
+    const [canvasStyle, setCanvasStyle] = useState(styles);
+    const [errorText, setErrorText] = useState('');
+    const [markSolvedClassName, setMarkSolvedClassName] = useState('btn-canvas change');
+    const [isMarkSolved, setIsmarkSolved] = useState(props.riddle.is_solved);
 
     const canvasEl = useRef(null);
 
     useEffect(() => {
         const isHavePaint = !_.isEmpty(props.riddle.paint);
-        if(isHavePaint) {
+        if (isHavePaint) {
             loadPath(props.riddle.paint);
         }
+
+        if(props.riddle.is_solved) {
+            setMarkSolvedClassName('btn-canvas change solved');
+        }
     }, [])
+
+    useEffect(() => {
+        if(isMarkSolved) {
+            setMarkSolvedClassName('btn-canvas change solved');
+        } else {
+            setMarkSolvedClassName('btn-canvas change');
+        }
+    }, [isMarkSolved])
+
+    // const test = () => {
+    //     const newStyle = {... canvasStyle}
+
+    //     newStyle.width= "70%"
+
+    //     setCanvasStyle(newStyle);
+    // }
 
     const handleClickPen = () => {
         setColor('black');
@@ -41,21 +78,35 @@ const Canvas = (props) => {
 
     const exportImage = () => {
         canvasEl.current.exportImage("png")
-              .then(data => {
+            .then(data => {
                 console.log(data);
-              })
-              .catch(e => {
+            })
+            .catch(e => {
                 console.log(e);
-              });
+            });
     }
 
     const handleSave = async () => {
         try {
             const paint = await canvasEl.current.exportPaths();
-            await savePaint({paint, riddleId: props.riddle._id});
+            setErrorText('');
+            await savePaint({ paint, riddleId: props.riddle._id });
         } catch (err) {
             // TODO ...
+            setErrorText(config.texts.errors.savePaintError);
             console.log('error to save paint... ', err);
+        }
+    }
+
+    const markAsSolve = async () => {
+        try {
+            setErrorText('');
+            await markSolveState({ riddleId: props.riddle._id, solveState: !isMarkSolved });
+            setIsmarkSolved(!isMarkSolved);
+        } catch (err) {
+            // TODO ...
+            setErrorText(config.texts.errors.markSolvedError);
+            console.log('error to markAsSolve... ', err);
         }
     }
 
@@ -65,23 +116,27 @@ const Canvas = (props) => {
 
     return (
         <div className="riddle-canvas-container">
+            <div className='error-text'>{errorText}</div>
+            <div className="btn-container">
+                <SaveOutlinedIcon className="btn-canvas save" onClick={handleSave} />
+                <CreateOutlinedIcon className="btn-canvas change" onClick={handleClickPen} />
+                <Crop75OutlinedIcon className="btn-canvas change" onClick={handleClickErase} />
+                <DeleteOutlineOutlinedIcon className="btn-canvas change" onClick={() => canvasEl.current.clearCanvas()} />
+                <UndoOutlinedIcon className="btn-canvas change" onClick={() => canvasEl.current.undo()} />
+                <RedoOutlinedIcon className="btn-canvas change" onClick={() => canvasEl.current.redo()} />
+                <DoneOutlineOutlinedIcon className={markSolvedClassName} onClick={markAsSolve} />
+                {/* <OpenWithOutlinedIcon onClick={test}/> */}
+            </div>
             <ReactSketchCanvas
                 ref={canvasEl}
                 allowOnlyPointerType="all"
-                style={styles}
+                style={canvasStyle}
                 width="600"
                 height="400"
                 strokeWidth={strokeWidth}
                 strokeColor={color}
             />
-            <div className="btn-container">
-                <button className="btn-canvas save" onClick={handleSave}>save</button>
-                <button className="btn-canvas change" onClick={handleClickPen}>pen</button>
-                <button className="btn-canvas change" onClick={handleClickErase}>erase pen</button>
-                <button className="btn-canvas change" onClick={() => canvasEl.current.undo()}>undo</button>
-                <button className="btn-canvas change" onClick={() => canvasEl.current.redo()}>redo</button>
-                <button className="btn-canvas change" onClick={() => canvasEl.current.clearCanvas()}>clear canvas</button>
-            </div>
+
         </div>
     );
 };

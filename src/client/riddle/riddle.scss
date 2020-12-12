@@ -1,0 +1,53 @@
+.riddle-container {
+    .arrow-back {
+        margin: 10px;
+    }
+    .question-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        // width: 100%;
+        padding: 10px;
+        margin: 5px auto;
+
+        .title {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: baseline;
+
+            .title-text {
+                font-size: 18px;
+                font-weight: 600;
+            }
+        }
+
+        .content {
+            overflow: hidden;
+            .question {
+                text-align: right;
+            }
+        }
+
+        &.collapsed {
+            transition: max-height 0.6s ease;
+            // max-height: 90px;
+        }
+        &.expand {
+            transition: max-height 0.6s ease;
+            // max-height: 150px;
+        }
+
+
+        .btn {
+            margin: 4px;
+            transition: 0.6s ease;
+            &.collapsed {
+                transform: rotate(90deg);
+            }
+            &.expand {
+                transform: rotate(-90deg);
+            }
+        }
+    }
+}

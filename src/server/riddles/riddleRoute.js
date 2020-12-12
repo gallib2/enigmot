@@ -41,7 +41,31 @@ router.post('/save', auth, async function(req, res, next) {
         console.log('---------- is saved? ', isSaved);
         // TODO - handle if not saved
 
-        res.sendStatus(httpStatus.ok);
+        if(!isSaved) {
+            return res.sendStatus(httpStatus.badRequest);
+        }
+
+        return res.sendStatus(httpStatus.ok);
+
+    } catch (err) {
+        // TODO
+        console.log('error in / save rout: ', err);
+        res.sendStatus(httpStatus.badRequest);
+    }
+})
+
+router.post('/solve', auth, async function(req, res, next) {
+    const {riddleId, solveState} = req.body;
+    const userId = req.session.userId;
+
+    try {
+
+        const isUpdated = await userService.changeSolveState({userId, riddleId, solveState});
+        if(!isUpdated) {
+            return res.sendStatus(httpStatus.badRequest);
+        }
+        
+        return res.sendStatus(httpStatus.ok);
     } catch (err) {
         // TODO
         console.log('error in / save rout: ', err);

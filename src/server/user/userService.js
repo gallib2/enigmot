@@ -85,11 +85,17 @@ async function savePaint({userId, paint, riddleId}) {
 
 }
 
+async function changeSolveState({userId, riddleId, solveState}) {
+    const isSaved = await dbService.updateSolvedState({collectionName: userCollection, userId, solveState, riddleId});
+    return isSaved;
+}
+
 module.exports = {
     getUserFromDB,
     ceateUser,
     getUser,
     getMatchesPassword,
     getUserRiddles,
-    savePaint
+    savePaint,
+    changeSolveState
 }

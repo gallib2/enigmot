@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import config from '../config';
-import validations from './validations';
 
 import PasswordInput from './passwordInput';
 
@@ -14,50 +13,9 @@ const AuthForm = (props) => {
     const [generalFieldsError, setGeneralFieldsError] = useState('');
     const { fieldsError, setErrors, validateField, isAllFieldsAreValid } = useErrors();
     const [username, setUsername] = useState('');
-    // const [usernameHelperText, setUsernameHelperText] = useState('');
-    // const [usernameIsError, setUsernameIsError] = useState(false);
-
     const [password, setPassword] = useState('');
-    // const [passwordHelperText, setPasswordHelperText] = useState('');
-    // const [passwordIsError, setPasswordIsError] = useState(false);
-
     const [email, setEmail] = useState('');
-    // const [emailHelperText, setEmailHelperText] = useState('');
-    // const [emailIsError, seStEmailIsError] = useState(false);
-
-    const [isAllFieldsValid, setIsAllFielsValid] = useState(false);
-    const [submitClassName, setSubmitClassName] = useState('')
-
-    // const setterErrorMsgRefrence = (field) => {
-    //     const refs = {
-    //         email: setEmailHelperText,
-    //         password: setPasswordHelperText,
-    //         username: setUsernameHelperText
-    //     }
-
-    //     return refs[field];
-    // }
-
-    // const setterIsErrorRefrence = (field) => {
-    //     const refs = {
-    //         email: seStEmailIsError,
-    //         password: setPasswordIsError,
-    //         username: setUsernameIsError
-    //     }
-
-    //     return refs[field];
-    // }
-
-    // const setterFieldsRefrence = (field) => {
-    //     const refs = {
-    //         email: setEmail,
-    //         password: setPassword,
-    //         username: setUsername
-    //     }
-
-    //     return refs[field];
-    // }
-
+    
     const setterFieldsRefrence = {
         email: setEmail,
         password: setPassword,
@@ -71,31 +29,6 @@ const AuthForm = (props) => {
         setGeneralFieldsError('');
     }
 
-    // const handleUserNameChange = (event) => {
-    //     setUsername(event.target.value);
-    //     setErrors({ setError: false, errorMsg: '', field: event.target.name });
-    //     setGeneralFieldsError('');
-    // }
-
-    // const handleEmailChange = (event) => {
-    //     setEmail(event.target.value);
-    //     setErrors({ setError: false, errorMsg: '', field: event.target.name });
-    //     setGeneralFieldsError('');
-    // }
-
-    // const handlePasswordChange = (event) => {
-    //     setPassword(event.target.value);
-    //     setErrors({ setError: false, errorMsg: '', field: event.target.name });
-    //     setGeneralFieldsError('');
-    // }
-
-    // const setErrors = ({setError, errorMsg, field}) => {
-    //     const funcSetErrorMsg = setterErrorMsgRefrence(field);
-    //     const funcSetErrorState = setterIsErrorRefrence(field);
-    //     funcSetErrorMsg(errorMsg);
-    //     funcSetErrorState(setError);
-    // }
-
     const handleBlur = (event) => {
         if (!props.toValidate) return;
 
@@ -103,24 +36,18 @@ const AuthForm = (props) => {
         const value = event.target.value;
         validateField(field, value);
         setGeneralFieldsError('');
-        // const validation = validations(field, value);
-        // setErrors({setError: validation.isError, errorMsg: validation.errorMsg, field})
     }
-
-    // const isAllFieldsAreValid = () => {
-    //     for(const field of fields) {
-    //         validations(field, field);
-    //     }
-    // }
 
     const handleSubmitClick = async (event) => {
         event.preventDefault();
 
-        const isAllvalid = isAllFieldsAreValid({ email, password, username });
+        if(props.toValidate) {
+            const isAllvalid = isAllFieldsAreValid({ email, password, username });
 
-        if (!isAllvalid) {
-            setGeneralFieldsError(config.texts.errors.generalFieldsError);
-            return;
+            if (!isAllvalid) {
+                setGeneralFieldsError(config.texts.errors.generalFieldsError);
+                return;
+            }
         }
 
         setGeneralFieldsError('');
@@ -132,7 +59,7 @@ const AuthForm = (props) => {
             }
             await props.submitFunction(dataToSubmit);
         } catch (err) {
-            setErrors(true, config.texts.errors.generalError);
+            setGeneralFieldsError(config.texts.errors.generalError);
         }
     }
 
