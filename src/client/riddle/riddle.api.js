@@ -1,40 +1,28 @@
 import axios from 'axios';
 import config from '../config';
 
-export async function savePaint({paint, riddleId}) {
-    try {
-        const data = {paint, riddleId};
-        const options = {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            data: data,
-            url: `${config.api_route}/riddles/save`,
-            withCredentials: true
-        };
+export function savePaint({ paint, riddleId }) {
+    const data = { paint, riddleId };
+    const options = {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        data: data,
+        url: `${config.api_route}/riddles/save`,
+        withCredentials: true
+    };
 
-        const res = await axios(options);
-
-    } catch (err) {
-         // TODO
-        console.log('error from sign up api: ', err);
-    }
+    return axios(options);
 }
 
-export async function markSolveState({riddleId, solveState}) {
-    try {
-        const data = {riddleId, solveState};
-        const options = {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            // headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: data,
-            url: `${config.api_route}/riddles/solve`,
-            withCredentials: true
-        };
-        const res = await axios(options);
-
-    } catch (err) {
-        // TODO
-        console.log('error from sign in api: ', err);
-    }
+export function markSolveState({ riddleId, solveState }) {
+    const data = { riddleId, solveState };
+    const options = {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        // headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        data: data,
+        url: `${config.api_route}/riddles/solve`,
+        withCredentials: true
+    };
+    return axios(options);
 }

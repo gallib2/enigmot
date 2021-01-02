@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import _ from 'lodash';
 import config from '../config';
-
 import { savePaint, markSolveState } from './riddle.api';
+import RiddleState from './riddleState';
 
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
@@ -34,8 +34,6 @@ const Canvas = (props) => {
     const [strokeWidth, setStrokeWidth] = useState(4);
     const [canvasStyle, setCanvasStyle] = useState(styles);
     const [errorText, setErrorText] = useState('');
-    const [markSolvedClassName, setMarkSolvedClassName] = useState('btn-canvas change');
-    const [isMarkSolved, setIsmarkSolved] = useState(props.riddle.is_solved);
 
     const canvasEl = useRef(null);
 
@@ -45,26 +43,7 @@ const Canvas = (props) => {
             loadPath(props.riddle.paint);
         }
 
-        if(props.riddle.is_solved) {
-            setMarkSolvedClassName('btn-canvas change solved');
-        }
     }, [])
-
-    useEffect(() => {
-        if(isMarkSolved) {
-            setMarkSolvedClassName('btn-canvas change solved');
-        } else {
-            setMarkSolvedClassName('btn-canvas change');
-        }
-    }, [isMarkSolved])
-
-    // const test = () => {
-    //     const newStyle = {... canvasStyle}
-
-    //     newStyle.width= "70%"
-
-    //     setCanvasStyle(newStyle);
-    // }
 
     const handleClickPen = () => {
         setColor('black');
@@ -76,15 +55,15 @@ const Canvas = (props) => {
         setStrokeWidth(7);
     }
 
-    const exportImage = () => {
-        canvasEl.current.exportImage("png")
-            .then(data => {
-                console.log(data);
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    }
+    // const exportImage = () => {
+    //     canvasEl.current.exportImage("png")
+    //         .then(data => {
+    //             console.log(data);
+    //         })
+    //         .catch(e => {
+    //             console.log(e);
+    //         });
+    // }
 
     const handleSave = async () => {
         try {
@@ -92,21 +71,7 @@ const Canvas = (props) => {
             setErrorText('');
             await savePaint({ paint, riddleId: props.riddle._id });
         } catch (err) {
-            // TODO ...
             setErrorText(config.texts.errors.savePaintError);
-            console.log('error to save paint... ', err);
-        }
-    }
-
-    const markAsSolve = async () => {
-        try {
-            setErrorText('');
-            await markSolveState({ riddleId: props.riddle._id, solveState: !isMarkSolved });
-            setIsmarkSolved(!isMarkSolved);
-        } catch (err) {
-            // TODO ...
-            setErrorText(config.texts.errors.markSolvedError);
-            console.log('error to markAsSolve... ', err);
         }
     }
 
@@ -124,7 +89,13 @@ const Canvas = (props) => {
                 <DeleteOutlineOutlinedIcon className="btn-canvas change" onClick={() => canvasEl.current.clearCanvas()} />
                 <UndoOutlinedIcon className="btn-canvas change" onClick={() => canvasEl.current.undo()} />
                 <RedoOutlinedIcon className="btn-canvas change" onClick={() => canvasEl.current.redo()} />
-                <DoneOutlineOutlinedIcon className={markSolvedClassName} onClick={markAsSolve} />
+                <RiddleState
+                    riddle={props.riddle}
+                    showWrap={false}
+                    onClickChangeSolveState={() => setErrorText('')}
+                    onErrorChangeSolveState={() => setErrorText(config.texts.errors.markSolvedError)}
+                />
+                {/* <DoneOutlineOutlinedIcon className={markSolvedClassName} onClick={markAsSolve} /> */}
                 {/* <OpenWithOutlinedIcon onClick={test}/> */}
             </div>
             <ReactSketchCanvas

@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { Redirect, useLocation } from 'react-router-dom';
 import config from '../config';
+import auth from '../authentication/auth';
 
 import PasswordInput from './passwordInput';
 
 import './authForm.scss';
 import useErrors from './useErrors';
+import img from '../../images/enigmot1.png';
+// import img from '../../images/enigmot2.png';
+// import img from '../../images/enigmot3.png';
 
 
 const AuthForm = (props) => {
+    const [redirectTorefferer, setRedirectToRefferer] = useState(false);
     const [generalFieldsError, setGeneralFieldsError] = useState('');
     const { fieldsError, setErrors, validateField, isAllFieldsAreValid } = useErrors();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
+    const {state} = useLocation();
     
     const setterFieldsRefrence = {
         email: setEmail,
@@ -57,14 +64,24 @@ const AuthForm = (props) => {
             if (props.showUserName) {
                 dataToSubmit.username = username
             }
+
             await props.submitFunction(dataToSubmit);
+            auth.authenticte();
+            setRedirectToRefferer(true);
+        
         } catch (err) {
+            setRedirectToRefferer(false);
             setGeneralFieldsError(config.texts.errors.generalError);
         }
     }
 
+    if(redirectTorefferer) {
+        return <Redirect to={state?.from || '/'}/>
+    }
+
     return (
         <div className="auth-container">
+            <img className='auth-img' src={img}/>
             <div className="auth-title">{props.title}</div>
             <form className='auth-form' noValidate autoComplete="off" onSubmit={handleSubmitClick}>
                 {props.showUserName && <TextField

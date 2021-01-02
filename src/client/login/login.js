@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {signinApi, isLoggedin} from '../authentication/authenticationApi';
-import auth from '../authentication/auth';
+// import auth from '../authentication/auth';
 import AuthForm from '../authentication/authForm';
 import { Redirect, useLocation } from 'react-router-dom';
 
@@ -10,8 +10,6 @@ const Login = () => {
     const {state} = useLocation();
 
     useEffect(() => {
-        
-        console.log('from use eefect')
         async function isAlreadLoggedIn() {
             const toRedirectToRefferer = await isLoggedin();
             setRedirectToRefferer(toRedirectToRefferer);
@@ -20,17 +18,16 @@ const Login = () => {
         isAlreadLoggedIn();
     }, [])
     
-    const handleSubmit = async (data) => {
-        try {
-            await signinApi(data);
-            auth.authenticte();
-            setRedirectToRefferer(true);
+    // const handleSubmit = async (data) => {
+    //     try {
+    //         await signinApi(data);
+    //         auth.authenticte();
+    //         setRedirectToRefferer(true);
 
-        } catch (err) {
-            console.log('error from login', err);
-            setRedirectToRefferer(false);
-        }
-    }
+    //     } catch (err) {
+    //         setRedirectToRefferer(false);
+    //     }
+    // }
 
     if(redirectToSignUp) {
         return <Redirect to={'/signup'}/>
@@ -44,9 +41,9 @@ const Login = () => {
     return (
         <div>
             <AuthForm
-                title={'Login'}
+                title={'Welcome back'}
                 showUserName={false}
-                submitFunction={handleSubmit}
+                submitFunction={signinApi}
                 submitButtonText={'login'}
                 swipAuthFormFunc = {() => setRedirectToSignup(true)}
                 swipAuthFormText = {'new one? join here'}

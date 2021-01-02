@@ -1,6 +1,12 @@
 .riddle-container {
-    .arrow-back {
-        margin: 10px;
+    .riddle-container-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        width: 100%;
+        .arrow-back {
+            margin: 10px;
+        }
     }
     .question-container {
         display: flex;
@@ -24,8 +30,12 @@
 
         .content {
             overflow: hidden;
+            width: 100%;
             .question {
-                text-align: right;
+                // text-align: right;
+                direction: rtl;
+                text-align: justify;
+                white-space: pre-line;
             }
         }
 

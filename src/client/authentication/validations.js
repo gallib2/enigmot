@@ -34,7 +34,7 @@ function passwordValidate(password) {
 
 function usernameValidate(username) {
     const usernameValidRes = Object.assign({}, validationObject);
-    const usernameRegex = /^[a-zA-Z ]{2,30}$/;
+    const usernameRegex = /^[a-zA-Z ]{3,30}$/;
     const isValid = usernameRegex.test(String(username).toLowerCase());
 
     if (!isValid) {

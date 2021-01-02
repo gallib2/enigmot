@@ -1,11 +1,12 @@
 const _ = require('lodash');
 const dbService = require('../db-service');
+const riddles = require('./riddlesJson');
 
 const collectionName = 'riddles';
 
 async function getRiddles() {
     try {
-        const docs = await dbService.getAllDocumentOfCollection({collectionName});
+        const docs = riddles;//await dbService.getAllDocumentOfCollection({collectionName});
         return docs;
     } catch (err) {
         console.log('err form get riddles: ', err);
@@ -38,7 +39,7 @@ function mergeUserRiddlesWithGeneral({userRiddles, riddles}) {
     for(const riddle of riddles) {
         // console.log('riddle: ', riddle);
         // console.log('userRiddles: ', userRiddles);
-        const userRiddle = userRiddles.find(item => item.riddleId === riddle._id.toString()) || {};
+        const userRiddle = userRiddles.find(item => item.riddleId == riddle._id) || {};
         // console.log('userRiddle: ', userRiddle)
         const res = Object.assign({}, riddleClientObject, riddle, userRiddle);
 

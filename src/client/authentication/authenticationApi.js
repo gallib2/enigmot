@@ -2,55 +2,34 @@ import axios from 'axios';
 import config from '../config';
 import auth from './auth';
 
-export async function signupApi({email, username, password}) {
-    try {
-        const data = {email, username, password};
-        const options = {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            data: data,
-            url: `${config.api_route}/user/signup`,
-            withCredentials: true
-        };
-        const res = await axios(options);
-
-    } catch (err) {
-         // TODO
-        console.log('error from sign up api: ', err);
-    }
+export function signupApi({ email, username, password }) {
+    const data = { email, username, password };
+    const options = {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        data: data,
+        url: `${config.api_route}/user/signup`,
+        withCredentials: true
+    };
+    return axios(options);
 }
 
-export async function signinApi({email, password}) {
-    try {
-        const data = {email, password};
-        const options = {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            // headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: data,
-            url: `${config.api_route}/user/login`,
-            withCredentials: true
-        };
-        const res = await axios(options);
-
-    } catch (err) {
-        // TODO
-        console.log('error from sign in api: ', err);
-    }
+export function signinApi({ email, password }) {
+    const data = { email, password };
+    const options = {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        // headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        data: data,
+        url: `${config.api_route}/user/login`,
+        withCredentials: true
+    };
+    return axios(options);
 }
-
-// async function isAlreadLoggedIn() {
-//     let toRedirectToRefferer = false;
-//     if(auth.isAuthenticated || await isLoggedin()) {
-//         toRedirectToRefferer = true;
-//         auth.authenticte();
-//     }
-//     setRedirectToRefferer(toRedirectToRefferer)
-// }
 
 export async function isLoggedin() {
     try {
-        if(auth.isAuthenticated) return true;
+        if (auth.isAuthenticated) return true;
 
         const options = {
             method: 'GET',
@@ -64,26 +43,18 @@ export async function isLoggedin() {
         return isAuth;
 
     } catch (err) {
-        // TODO
-        console.log('error from isLoggedin api: ', err);
         return false;
     }
 }
 
-export async function logout() {
-    try {
-        const data = {};
-        const options = {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            data: data,
-            url: `${config.api_route}/user/logout`,
-            withCredentials: true
-        };
-        const res = await axios(options);
-
-    } catch (err) {
-         // TODO
-        console.log('error from sign up api: ', err);
-    }
+export function logout() {
+    const data = {};
+    const options = {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        data: data,
+        url: `${config.api_route}/user/logout`,
+        withCredentials: true
+    };
+    return axios(options);
 }
