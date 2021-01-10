@@ -32,13 +32,12 @@ console.log('session from app.js: ', session);
 
 const port = process.env.PORT || 4000;
 
-
 // const corsOptions = {
 //   origin: 'http://localhost:3000',
 //   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 // }
 
-// app.use(cors());
+app.use(cors());
 app.use(express.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
@@ -51,7 +50,7 @@ var allowCrossDomain = function(req, res, next) {
   next();
 };
 
-app.use(allowCrossDomain);
+// app.use(allowCrossDomain);
 
 
 app.get('/', function (req, res) {
