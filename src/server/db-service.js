@@ -1,7 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const { ObjectId } = require('mongodb');
 
-// const url = 'mongodb+srv://enigmot_stg:WJUeqW4Pbq91Cg74@clustereng.f8clx.mongodb.net/riddleApp?retryWrites=true&w=majority'//'mongodb://localhost:27017';
 const url = process.env.MONGO_DB || 'mongodb://localhost:27017';
 const dbName = 'riddleApp';
 
