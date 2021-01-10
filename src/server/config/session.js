@@ -1,6 +1,6 @@
 
 const IN_PROD = require('./app');
-const HALF_HOUR = 1000 * 60 * 30
+const HALF_HOUR = 1000 * 60 * 60
 
 const {
     SESSION_SECRET = 'hey hey what can i do',
