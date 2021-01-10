@@ -22,8 +22,6 @@ const AuthForm = (props) => {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const {state} = useLocation();
-
-    console.log('------------ process.env.BASE_URL', process.env)
     
     const setterFieldsRefrence = {
         email: setEmail,
