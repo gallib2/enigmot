@@ -37,7 +37,20 @@ const port = process.env.PORT || 4000;
 //   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 // }
 
-app.use(cors());
+var whitelist = ['https://enigmot.herokuapp.com', 'https://enigmot-api.herokuapp.com', 'http://localhost:3000']
+var corsOptions = {
+  credentials: true,
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+
+app.use(cors(corsOptions));
 app.use(express.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
