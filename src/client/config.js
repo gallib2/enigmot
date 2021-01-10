@@ -1,5 +1,5 @@
 export default {
-    api_route: 'https://enigmot-api.herokuapp.com', //'http://localhost:4000',
+    api_route: process.env.BASE_URL || 'http://localhost:4000',
     texts: {
         errors: {
             generalError: 'error accured, please try again later',
