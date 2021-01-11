@@ -37,11 +37,11 @@ const port = process.env.PORT || 4000;
 //   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 // }
 
-var whitelist = ['https://enigmot.herokuapp.com', 'https://enigmot-api.herokuapp.com', 'http://localhost:3000']
+var whitelist = ['https://enigmot.herokuapp.com', 'https://enigmot-api.herokuapp.com', /\.herokuapp\.com$/, 'http://localhost:3000']
 var corsOptions = {
   credentials: true,
-  origin: ['https://enigmot.herokuapp.com/', 'https://enigmot-api.herokuapp.com/', 'http://localhost:3000'],
-  allowedHeaders: ["Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"]
+  origin: whitelist,
+  // allowedHeaders: ["Access-Control-Allow-Headers", "Access-Control-Allow-Origin",  "Origin", "X-Requested-With", "Content-Type", "Accept"]
 }
 
 
