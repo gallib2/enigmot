@@ -40,7 +40,7 @@ const port = process.env.PORT || 4000;
 var whitelist = ['https://enigmot.herokuapp.com', 'https://enigmot-api.herokuapp.com', 'http://localhost:3000']
 var corsOptions = {
   credentials: true,
-  origin: ['https://enigmot.herokuapp.com', 'https://enigmot-api.herokuapp.com', 'http://localhost:3000'],
+  origin: ['https://enigmot.herokuapp.com/', 'https://enigmot-api.herokuapp.com/', 'http://localhost:3000'],
   allowedHeaders: ["Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"]
 }
 
